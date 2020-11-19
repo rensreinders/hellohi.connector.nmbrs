@@ -25,7 +25,7 @@ $client->createDebtor('Some client', $highestDebNumber + 1);
 $highestCompanyNumber = $client->getHighestCompanyNumber();
 $company = $client->createCompanyForDeptor($debtor->Id, [
     'Number' => $highestCompanyNumber,
-    'CompanyName' => 'MKA Test 24',
+    'CompanyName' => 'Some Company',
     'PeriodType' => NmbrsClient::DeclarationPeriodMonth,
     'DefaultCompanyId' => -1,
     'LabourAgreementSettingsGroupGuid' => '00000000-0000-0000-0000-000000000000',
