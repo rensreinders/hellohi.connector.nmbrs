@@ -8,6 +8,7 @@ use Mijnkantoor\NMBRS\Exceptions\NmbrsException;
 
 trait CompanyCallsTrait
 {
+    protected $companyCache = [];
 
     public function getAllCompaniesByDebtorId($id)
     {
@@ -79,13 +80,31 @@ trait CompanyCallsTrait
 
     public function getAllCompanies()
     {
+        if(count($this->companyCache) > 0) {
+            return $this->companyCache;
+        }
+
         try {
             $response = $this->companyClient->List_GetAll();
+            $response = $this->wrapArray($response->List_GetAllResult->Company ?? null);
 
-            return $this->wrapArray($response->List_GetAllResult->Company ?? null);
+            $this->companyCache = $response;
+
+            return $response;
         } catch (\Exception $e) {
             throw new NmbrsException($e->getMessage());
         }
+    }
+
+    public function getCompanyById($id)
+    {
+        foreach($this->getAllCompanies() as $company) {
+            if($company->ID == $id) {
+                return $company;
+            }
+        }
+
+        return null;
     }
 
 
@@ -95,8 +114,11 @@ trait CompanyCallsTrait
 
         try {
             $response = $this->companyClient->Company_Insert($data);
+            $response = $response->Company_InsertResult ?? null;
 
-            return $response->Company_InsertResult ?? null;
+            $this->companyCache[] = $response;
+
+            return $response;
         } catch (\Exception $e) {
             throw new NmbrsException($e->getMessage());
         }
