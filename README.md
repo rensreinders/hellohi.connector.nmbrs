@@ -8,7 +8,7 @@ include(__DIR__ . "/vendor/autoload.php");
 $client = new \Mijnkantoor\NMBRS\NmbrsClient("your-email-here", "your-token-here", "your-domai-here");
 ```
 
-#Create a company#
+# Create a company
 > Note: every company belongs to a debtor, so we creat that object first
 
 **First create a debtor**
@@ -59,7 +59,7 @@ $bankAccount = $client->createBankAccountForCompany($company->id, [
 ]);
 ```
 
-###Update a company
+## Update a company
 **First update debtor**
 ```php
 $client->updateDebtor($debtor->id, ['Name' => 'Other Debtor']);
