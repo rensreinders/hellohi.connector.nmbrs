@@ -14,7 +14,7 @@ trait CompanyCallsTrait
         try {
             $response = $this->companyClient->List_GetByDebtor(['DebtorId' => $id]);
 
-            return $this->wrapArray($response->List_GetByDebtorResult->Company);
+            return $this->wrapArray($response->List_GetByDebtorResult->Company ?? null);
         } catch (\Exception $e) {
             throw new NmbrsException($e->getMessage());
         }
@@ -44,7 +44,7 @@ trait CompanyCallsTrait
                 'intYear' => $year,
             ]);
 
-            return $this->wrapArray($response->WageTax_GetListResult->WageTax);
+            return $this->wrapArray($response->WageTax_GetListResult->WageTax ?? null);
         } catch (\Exception $e) {
             throw new NmbrsException($e->getMessage());
         }
@@ -82,7 +82,7 @@ trait CompanyCallsTrait
         try {
             $response = $this->companyClient->List_GetAll();
 
-            return $this->wrapArray($response->List_GetAllResult->Company);
+            return $this->wrapArray($response->List_GetAllResult->Company ?? null);
         } catch (\Exception $e) {
             throw new NmbrsException($e->getMessage());
         }
