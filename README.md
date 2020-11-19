@@ -1,6 +1,6 @@
 # NMBRS SDK PHP
 
-###Init the client
+## Init the client
 > Note: the user should have access to all the resource in nmbrs. You can manage this trough user templates.
 ```php
 use Mijnkantoor\NMBRS\NmbrsClient;
@@ -8,7 +8,7 @@ include(__DIR__ . "/vendor/autoload.php");
 $client = new \Mijnkantoor\NMBRS\NmbrsClient("your-email-here", "your-token-here", "your-domai-here");
 ```
 
-###Create a company
+#Create a company#
 > Note: every company belongs to a debtor, so we creat that object first
 
 **First create a debtor**
