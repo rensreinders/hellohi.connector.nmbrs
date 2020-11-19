@@ -1,0 +1,29 @@
+{
+  "name": "mijnkantoor/nmbrs",
+  "description": "SDK to consume NMBRS API in PHP",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Rens Reinders",
+      "email": "rens@rapide.software"
+    }
+  ],
+  "require": {
+    "php": ">=7.1",
+    "ext-soap": "*"
+  },
+  "require-dev": {
+
+  },
+  "autoload": {
+    "psr-4": {
+      "Mijnkantoor\\NMBRS\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "classmap": [
+      "tests/"
+    ]
+  }
+}
