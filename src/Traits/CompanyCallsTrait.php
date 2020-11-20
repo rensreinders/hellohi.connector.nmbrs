@@ -99,7 +99,7 @@ trait CompanyCallsTrait
     public function getCompanyById($id)
     {
         foreach($this->getAllCompanies() as $company) {
-            if($company->ID == $id) {
+            if($company->Id == $id) {
                 return $company;
             }
         }
