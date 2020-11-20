@@ -99,7 +99,7 @@ trait CompanyCallsTrait
     public function getCompanyById($id)
     {
         foreach($this->getAllCompanies() as $company) {
-            if($company->Id == $id) {
+            if($company->ID == $id) {
                 return $company;
             }
         }
@@ -115,8 +115,6 @@ trait CompanyCallsTrait
         try {
             $response = $this->companyClient->Company_Insert($data);
             $response = $response->Company_InsertResult ?? null;
-
-            $this->companyCache[] = $response;
 
             return $response;
         } catch (\Exception $e) {
