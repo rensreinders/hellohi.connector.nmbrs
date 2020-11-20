@@ -186,7 +186,8 @@ trait CompanyCallsTrait
         try {
             $result = $this->companyClient->BankAccount_GetCurrent(['CompanyId' => $companyId]);
 
-            return $result->BankAccount_GetCurrentResult ?? null;
+            return isset($result->BankAccount_GetCurrentResult->Id) && $result->BankAccount_GetCurrentResult->Id
+                ? $result->BankAccount_GetCurrentResult : null;
         } catch (\Exception $e) {
             throw new NmbrsException($e->getMessage());
         }
