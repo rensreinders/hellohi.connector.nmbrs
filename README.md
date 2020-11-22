@@ -64,7 +64,7 @@ $bankAccount = $client->createBankAccountForCompany($company->id, [
 ```php
 $client->updateDebtor($debtor->id, ['Name' => 'Other Debtor']);
 ```
-**Update an address for company**
+**Update the company**
 ```php
 // oops, doesn't exist at nmbrs API
 ````
