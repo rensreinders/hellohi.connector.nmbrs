@@ -65,6 +65,21 @@ trait CompanyCallsTrait
         }
     }
 
+
+    public function setWageTaxSendExternal($companyId, $wageDeclarationId)
+    {
+        try {
+            $response = $this->companyClient->WageTax_SetSentExternal([
+                'CompanyId' => $companyId,
+                'LoonaangifteID' => $wageDeclarationId,
+            ]);
+
+            return $response->WageTax_SetSentExternalResult ?? null;
+        } catch (\Exception $e) {
+            throw new NmbrsException($e->getMessage());
+        }
+    }
+
     public function getHighestCompanyNumber()
     {
         $highestNumber = 0;

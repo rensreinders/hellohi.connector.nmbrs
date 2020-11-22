@@ -19,19 +19,35 @@ class NmbrsClient
     const DeclarationPeriodWeek = '3';
 
     protected $debtorClient = null;
+    /**
+     * @var false
+     */
+    private $sandbox;
 
     use CompanyCallsTrait;
     use DebtorCallsTrait;
 
-    public function __construct($username, $password, $domain)
+    public function __construct($username, $password, $domain, $sandbox = false)
     {
+        $this->sandbox = $sandbox;
+
         $this->debtorClient = $this->getClientForService(self::DEBTOR_SERVICE, $username, $password, $domain);
         $this->companyClient = $this->getClientForService(self::COMPANY_SERVICE, $username, $password, $domain);
     }
 
+    protected function getBaseUrl()
+    {
+        if($this->sandbox) {
+            $url = "https://api-sandbox.nmbrs.nl/soap/v3/";
+        } else {
+            $url = "https://api.nmbrs.nl/soap/v3/";
+        }
+        return $url;
+    }
+
     protected function getClientForService($service, $username, $password, $domain)
     {
-        $ns = "https://api.nmbrs.nl/soap/v3/".$service;
+        $ns = $this->getBaseUrl().$service;
 
         $client = new SoapClient($ns.".asmx?WSDL", ['trace' => 1]);
 
