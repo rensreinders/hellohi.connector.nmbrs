@@ -63,6 +63,10 @@ class NmbrsClient
 
     private function wrapArray($data)
     {
+        if($data == null) {
+            return [];
+        }
+
         if(is_array($data)) { // array of objects
             return $data;
         }
