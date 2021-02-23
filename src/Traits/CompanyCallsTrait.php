@@ -51,6 +51,35 @@ trait CompanyCallsTrait
         }
     }
 
+    public function getAllRunsByYear($companyId, $year)
+    {
+        try {
+            $response = $this->companyClient->Run_GetList([
+                'CompanyId' => $companyId,
+                'Year' => $year,
+            ]);
+
+            return $this->wrapArray($response->Run_GetListResult->RunInfo ?? null);
+        } catch (\Exception $e) {
+            throw new NmbrsException($e->getMessage());
+        }
+    }
+
+    public function getPayslipsPdf($companyId, $year, $runId)
+    {
+        try {
+            $response = $this->companyClient->SalaryDocuments_GetAllPayslipsPDFByRunCompany_v2([
+                'CompanyId' => $companyId,
+                'intYear' => $year,
+                'RunID' => $runId
+            ]);
+
+            return $response->SalaryDocuments_GetAllPayslipsPDFByRunCompany_v2Result->PDF ?? null;
+        } catch (\Exception $e) {
+            throw new NmbrsException($e->getMessage());
+        }
+    }
+
     public function getWageTaxXml($companyId, $wageDeclarationId)
     {
         try {
@@ -121,7 +150,6 @@ trait CompanyCallsTrait
 
         return null;
     }
-
 
     public function createCompanyForDeptor($deptorId, $data)
     {
@@ -207,7 +235,4 @@ trait CompanyCallsTrait
             throw new NmbrsException($e->getMessage());
         }
     }
-
-
-
 }
