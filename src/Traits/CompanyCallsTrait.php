@@ -235,4 +235,20 @@ trait CompanyCallsTrait
             throw new NmbrsException($e->getMessage());
         }
     }
+    
+    public function getSEPA($companyId, $year, $runId, $paymentDate)
+    {
+        try {
+            $response = $this->companyClient->SalaryDocuments_GetSEPA([
+                'CompanyId' => $companyId,
+                'Year' => $year,
+                'RunID' => $runId,
+                'paymentDate' => $paymentDate
+            ]);
+            
+            return $response->SalaryDocuments_GetSEPAResult ?? null;
+        } catch (\Exception $e) {
+            throw new NmbrsException($e->getMessage());
+        }
+    }
 }
