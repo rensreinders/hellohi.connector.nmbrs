@@ -184,13 +184,16 @@ trait CompanyCallsTrait
     {
         $data['Address'] = $newData;
         $data['Address']['Id'] = $addressId;
-        $data['CompanyId'] = $companyId;
+        $data['CompanyId'] = intval($companyId);
         
         try {
             $this->companyClient->Address_Update($data);
+            dd($this->companyClient);
             // no return value here...
+            dd($this->getCurrentAddressByCompanyId($companyId));
             return true;
         } catch (\Exception $e) {
+            dd($e);
             throw new NmbrsException($e->getMessage());
         }
     }
@@ -291,7 +294,7 @@ trait CompanyCallsTrait
     }
     
     /**
-     *  Ingediende loonaangiften
+     *  Ingediende verzonden loonaangiften
      * https://api.nmbrs.nl/soap/v3/CompanyService.asmx?op=SalaryDocuments_AnnualDocument_SentWageTaxDeclarations
      */
     public function getAnnualSentWageTaxDocuments($companyId, $year, $runId)
@@ -342,6 +345,194 @@ trait CompanyCallsTrait
             ]);
             
             return $response->SalaryDocuments_AnnualDocument_ReservationSaldosResult ?? null;
+        } catch (\Exception $e) {
+            throw new NmbrsException($e->getMessage());
+        }
+    }
+    
+    /**
+     *
+     * https://api.nmbrs.nl/soap/v3/CompanyService.asmx?op=SalaryDocuments_AnnualDocument_WageTaxDeclarationOverviewCumulative
+     */
+    public function getAnnualWageTaxDeclarationOverviewCumulativeDocuments($companyId, $year, $runId)
+    {
+        try {
+            $response = $this->companyClient->SalaryDocuments_AnnualDocument_WageTaxDeclarationOverviewCumulative([
+                'CompanyId' => $companyId,
+                'Year' => $year,
+                'RunId' => $runId
+            ]);
+            
+            return $response->SalaryDocuments_AnnualDocument_WageTaxDeclarationOverviewCumulativeResult ?? null;
+        } catch (\Exception $e) {
+            throw new NmbrsException($e->getMessage());
+        }
+    }
+    
+    /**
+     *
+     * https://api.nmbrs.nl/soap/v3/CompanyService.asmx?op=SalaryDocuments_AnnualDocument_PayrollRegisterSummaryCumulative
+     */
+    public function getAnnualPayrollRegisterSummaryCumulativeDocuments($companyId, $year, $runId)
+    {
+        try {
+            $response = $this->companyClient->SalaryDocuments_AnnualDocument_PayrollRegisterSummaryCumulative([
+                'CompanyId' => $companyId,
+                'Year' => $year,
+                'RunId' => $runId
+            ]);
+            
+            return $response->SalaryDocuments_AnnualDocument_PayrollRegisterSummaryCumulativeResult ?? null;
+        } catch (\Exception $e) {
+            throw new NmbrsException($e->getMessage());
+        }
+    }
+    
+    /**
+     *
+     * https://api.nmbrs.nl/soap/v3/CompanyService.asmx?op=SalaryDocuments_AnnualDocument_PayrollRegisterAllEmployees
+     */
+    public function getAnnualPayrollRegisterAllEmployeesDocuments($companyId, $year, $runId)
+    {
+        try {
+            $response = $this->companyClient->SalaryDocuments_AnnualDocument_PayrollRegisterAllEmployees([
+                'CompanyId' => $companyId,
+                'Year' => $year,
+                'RunId' => $runId
+            ]);
+            
+            return $response->SalaryDocuments_AnnualDocument_PayrollRegisterAllEmployeesResult ?? null;
+        } catch (\Exception $e) {
+            throw new NmbrsException($e->getMessage());
+        }
+    }
+    
+    /**
+     *
+     * https://api.nmbrs.nl/soap/v3/CompanyService.asmx?op=SalaryDocuments_AnnualDocument_PayrollRegister
+     */
+    public function getAnnualPayrollRegisterDocuments($companyId, $year, $runId)
+    {
+        try {
+            $response = $this->companyClient->SalaryDocuments_AnnualDocument_PayrollRegister([
+                'CompanyId' => $companyId,
+                'Year' => $year,
+                'RunId' => $runId
+            ]);
+            
+            return $response->SalaryDocuments_AnnualDocument_PayrollRegisterResult ?? null;
+        } catch (\Exception $e) {
+            throw new NmbrsException($e->getMessage());
+        }
+    }
+    
+    /**
+     *
+     * https://api.nmbrs.nl/soap/v3/CompanyService.asmx?op=SalaryDocuments_AnnualDocument_LeaveSaldos
+     */
+    public function getAnnualLeaveSaldosDocuments($companyId, $year, $runId)
+    {
+        try {
+            $response = $this->companyClient->SalaryDocuments_AnnualDocument_LeaveSaldos([
+                'CompanyId' => $companyId,
+                'Year' => $year,
+                'RunId' => $runId
+            ]);
+            
+            return $response->SalaryDocuments_AnnualDocument_LeaveSaldosResult ?? null;
+        } catch (\Exception $e) {
+            throw new NmbrsException($e->getMessage());
+        }
+    }
+    
+    /**
+     *
+     * https://api.nmbrs.nl/soap/v3/CompanyService.asmx?op=SalaryDocuments_AnnualDocument_JournalEntriesEmployeeCumulative
+     */
+    public function getAnnualJournalEntriesEmployeeCumulativeDocuments($companyId, $year, $runId)
+    {
+        try {
+            $response = $this->companyClient->SalaryDocuments_AnnualDocument_JournalEntriesEmployeeCumulative([
+                'CompanyId' => $companyId,
+                'Year' => $year,
+                'RunId' => $runId
+            ]);
+            
+            return $response->SalaryDocuments_AnnualDocument_JournalEntriesEmployeeCumulativeResult ?? null;
+        } catch (\Exception $e) {
+            throw new NmbrsException($e->getMessage());
+        }
+    }
+    
+    /**
+     *
+     * https://api.nmbrs.nl/soap/v3/CompanyService.asmx?op=SalaryDocuments_AnnualDocument_JournalEntriesDepartmentCumulative
+     */
+    public function getAnnualJournalEntriesDepartmentCumulativeDocuments($companyId, $year, $runId)
+    {
+        try {
+            $response = $this->companyClient->SalaryDocuments_AnnualDocument_JournalEntriesDepartmentCumulative([
+                'CompanyId' => $companyId,
+                'Year' => $year,
+                'RunId' => $runId
+            ]);
+            
+            return $response->SalaryDocuments_AnnualDocument_JournalEntriesDepartmentCumulativeResult ?? null;
+        } catch (\Exception $e) {
+            throw new NmbrsException($e->getMessage());
+        }
+    }
+    
+    /**
+     *
+     * https://api.nmbrs.nl/soap/v3/CompanyService.asmx?op=SalaryDocuments_AnnualDocument_JournalEntriesCostCenterCumulative
+     */
+    public function getAnnualJournalEntriesCostCenterCumulativeDocuments($companyId, $year, $runId)
+    {
+        try {
+            $response = $this->companyClient->SalaryDocuments_AnnualDocument_JournalEntriesCostCenterCumulative([
+                'CompanyId' => $companyId,
+                'Year' => $year,
+                'RunId' => $runId
+            ]);
+            
+            return $response->SalaryDocuments_AnnualDocument_JournalEntriesCostCenterCumulativeResult ?? null;
+        } catch (\Exception $e) {
+            throw new NmbrsException($e->getMessage());
+        }
+    }
+    
+    /**
+     * https://api.nmbrs.nl/soap/v3/CompanyService.asmx?op=SalaryDocuments_AnnualDocument_CompanyWageComponentsCumulative
+     */
+    public function getAnnualCompanyWageComponentsCumulativeDocuments($companyId, $year, $runId)
+    {
+        try {
+            $response = $this->companyClient->SalaryDocuments_AnnualDocument_CompanyWageComponentsCumulative([
+                'CompanyId' => $companyId,
+                'Year' => $year,
+                'RunId' => $runId
+            ]);
+            
+            return $response->SalaryDocuments_AnnualDocument_CompanyWageComponentsCumulativeResult ?? null;
+        } catch (\Exception $e) {
+            throw new NmbrsException($e->getMessage());
+        }
+    }
+    
+    /**
+     * https://api.nmbrs.nl/soap/v3/CompanyService.asmx?op=SalaryDocuments_AnnualDocument_AnualStatement
+     */
+    public function getAnnualStatementDocuments($companyId, $year, $runId)
+    {
+        try {
+            $response = $this->companyClient->SalaryDocuments_AnnualDocument_AnualStatement([
+                'CompanyId' => $companyId,
+                'Year' => $year,
+                'RunId' => $runId
+            ]);
+            
+            return $response->SalaryDocuments_AnnualDocument_AnualStatementResult ?? null;
         } catch (\Exception $e) {
             throw new NmbrsException($e->getMessage());
         }
