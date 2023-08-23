@@ -188,12 +188,8 @@ trait CompanyCallsTrait
         
         try {
             $this->companyClient->Address_Update($data);
-            dd($this->companyClient);
-            // no return value here...
-            dd($this->getCurrentAddressByCompanyId($companyId));
             return true;
         } catch (\Exception $e) {
-            dd($e);
             throw new NmbrsException($e->getMessage());
         }
     }
