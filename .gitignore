@@ -1,2 +1,4 @@
 testclient.php
 .idea
+vendor
+composer.lock
