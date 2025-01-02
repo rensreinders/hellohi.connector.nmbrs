@@ -15,7 +15,7 @@ trait CompanyCallsTrait
         try {
             $response = $this->companyClient->List_GetByDebtor(['DebtorId' => $id]);
             
-            return $this->wrapArray($response->List_GetByDebtorResult->Company ?? null);
+            return $this->wrapArray($response->List_GetByDebtorResult?->Company ?? null);
         } catch (\Exception $e) {
             throw new NmbrsException($e->getMessage());
         }
@@ -45,7 +45,7 @@ trait CompanyCallsTrait
                 'intYear' => $year,
             ]);
             
-            return $this->wrapArray($response->WageTax_GetListResult->WageTax ?? null);
+            return $this->wrapArray($response->WageTax_GetListResult?->WageTax ?? null);
         } catch (\Exception $e) {
             throw new NmbrsException($e->getMessage());
         }
@@ -59,7 +59,7 @@ trait CompanyCallsTrait
                 'Year' => $year,
             ]);
             
-            return $this->wrapArray($response->Run_GetListResult->RunInfo ?? null);
+            return $this->wrapArray($response->Run_GetListResult?->RunInfo ?? null);
         } catch (\Exception $e) {
             throw new NmbrsException($e->getMessage());
         }
@@ -74,7 +74,7 @@ trait CompanyCallsTrait
                 'RunID' => $runId
             ]);
             
-            return $response->SalaryDocuments_GetAllPayslipsPDFByRunCompany_v2Result->PDF ?? null;
+            return $response->SalaryDocuments_GetAllPayslipsPDFByRunCompany_v2Result?->PDF ?? null;
         } catch (\Exception $e) {
             throw new NmbrsException($e->getMessage());
         }
@@ -130,7 +130,7 @@ trait CompanyCallsTrait
         
         try {
             $response = $this->companyClient->List_GetAll();
-            $response = $this->wrapArray($response->List_GetAllResult->Company ?? null);
+            $response = $this->wrapArray($response->List_GetAllResult?->Company ?? null);
             
             $this->companyCache = $response;
             

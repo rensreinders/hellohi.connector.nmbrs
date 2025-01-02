@@ -13,7 +13,7 @@ trait DebtorCallsTrait
         try {
             $response = $this->debtorClient->List_GetAll();
 
-            return $this->wrapArray($response->List_GetAllResult->Debtor);
+            return $this->wrapArray($response->List_GetAllResult?->Debtor);
         } catch (\Exception $e) {
             throw new NmbrsException($e->getMessage());
         }
