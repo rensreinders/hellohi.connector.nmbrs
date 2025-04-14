@@ -157,7 +157,7 @@ trait EmployeeCallsTrait
     }
 
     /**
-     * Get the Address for each employee in a given company
+     * Get the WageComponentFixed for a given employee
      * https://api.nmbrs.nl/soap/v3/EmployeeService.asmx?op=WageComponentFixed_GetCurrent
      *
      * @param int $employeeId
@@ -177,8 +177,8 @@ trait EmployeeCallsTrait
     }
 
     /**
-     * Get the Address for each employee in a given company
-     * https://api.nmbrs.nl/soap/v3/EmployeeService.asmx?op=WageComponentFixed_GetCurrent
+     * Get the WageTax for a given employee
+     * https://api.nmbrs.nl/soap/v3/EmployeeService.asmx?op=WageTax_GetList
      *
      * @param int $employeeId
      *
@@ -197,7 +197,7 @@ trait EmployeeCallsTrait
     }
 
     /**
-     * Get the Address for each employee in a given company
+     * Get the WageComponentVar for a given employee
      * https://api.nmbrs.nl/soap/v3/EmployeeService.asmx?op=WageComponentVar_GetCurrent
      *
      * @param int $employeeId
@@ -218,10 +218,12 @@ trait EmployeeCallsTrait
 
 
     /**
-     * Get the Address for each employee in a given company
-     * https://api.nmbrs.nl/soap/v3/EmployeeService.asmx?op=WageComponentVar_GetCurrent
+     * Get the Salaries for a given employee
+     * https://api.nmbrs.nl/soap/v3/EmployeeService.asmx?op=Salary_GetList
      *
      * @param int $employeeId
+     * @param int $year
+     * @param int $period
      *
      * @return array
      *
@@ -238,7 +240,7 @@ trait EmployeeCallsTrait
     }
 
     /**
-     * Get the Address for each employee in a given company
+     * Get the Current Salary for a given employee
      * https://api.nmbrs.nl/soap/v3/EmployeeService.asmx?op=Salary_GetCurrent
      *
      * @param int $employeeId
