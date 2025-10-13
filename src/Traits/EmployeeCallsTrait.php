@@ -76,7 +76,7 @@ trait EmployeeCallsTrait
 
     /**
      * Get the Address for each employee in a given company
-     * https://api.nmbrs.nl/soap/v3/EmployeeService.asmx?op=Address_GetAll_AllEmployeesByCompany
+     * https://api.nmbrs.nl/soap/v3/EmployeeService.asmx?op=Address_GetListCurrent
      *
      * @param int $employeeId
      *
