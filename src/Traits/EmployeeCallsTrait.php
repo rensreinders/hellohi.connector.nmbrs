@@ -157,7 +157,7 @@ trait EmployeeCallsTrait
     }
 
     /**
-     * Get the WageComponentFixed for a given employee
+     * Get the Address for each employee in a given company
      * https://api.nmbrs.nl/soap/v3/EmployeeService.asmx?op=WageComponentFixed_GetCurrent
      *
      * @param int $employeeId
@@ -177,8 +177,8 @@ trait EmployeeCallsTrait
     }
 
     /**
-     * Get the WageTax for a given employee
-     * https://api.nmbrs.nl/soap/v3/EmployeeService.asmx?op=WageTax_GetList
+     * Get the Address for each employee in a given company
+     * https://api.nmbrs.nl/soap/v3/EmployeeService.asmx?op=WageComponentFixed_GetCurrent
      *
      * @param int $employeeId
      *
@@ -197,7 +197,7 @@ trait EmployeeCallsTrait
     }
 
     /**
-     * Get the WageComponentVar for a given employee
+     * Get the Address for each employee in a given company
      * https://api.nmbrs.nl/soap/v3/EmployeeService.asmx?op=WageComponentVar_GetCurrent
      *
      * @param int $employeeId
@@ -218,12 +218,10 @@ trait EmployeeCallsTrait
 
 
     /**
-     * Get the Salaries for a given employee
-     * https://api.nmbrs.nl/soap/v3/EmployeeService.asmx?op=Salary_GetList
+     * Get the Address for each employee in a given company
+     * https://api.nmbrs.nl/soap/v3/EmployeeService.asmx?op=WageComponentVar_GetCurrent
      *
      * @param int $employeeId
-     * @param int $year
-     * @param int $period
      *
      * @return array
      *
@@ -240,8 +238,8 @@ trait EmployeeCallsTrait
     }
 
     /**
-     * Get the Current Salary for a given employee
-     * https://api.nmbrs.nl/soap/v3/EmployeeService.asmx?op=Salary_GetCurrent
+     * Get the Address for each employee in a given company
+     * https://api.nmbrs.nl/soap/v3/EmployeeService.asmx?op=WageComponentVar_GetCurrent
      *
      * @param int $employeeId
      *
@@ -401,16 +399,18 @@ trait EmployeeCallsTrait
         try {
             $response = $this->employeeClient->Contract_GetCurrentPeriod(['EmployeeId' => $employee_id]);
 
-            if (property_exists($response->EmployeeContractItem->EmployeeContracts, 'EmployeeContract')) {
-                foreach ($response->EmployeeContractItem->EmployeeContracts->EmployeeContract as $key => $item) {
-                    if (is_string($key)) {
-                        return $this->wrapArray($response->EmployeeContractItem->EmployeeContracts);
-                    } else {
-                        return $this->wrapArray((object) ['EmployeeContract' => end($response->EmployeeContractItem->EmployeeContracts->EmployeeContract)]);
-                    }
+            if (!property_exists($response->EmployeeContractItem->EmployeeContracts, 'EmployeeContract')) {
+                return $this->wrapArray((object) ['EmployeeContract' => []]);
+            }
+
+            foreach ($response->EmployeeContractItem->EmployeeContracts->EmployeeContract as $key => $item) {
+                if (is_string($key)) {
+                    return $this->wrapArray($response->EmployeeContractItem->EmployeeContracts);
+                } else {
+                    return $this->wrapArray((object) ['EmployeeContract' => end($response->EmployeeContractItem->EmployeeContracts->EmployeeContract)]);
                 }
             }
-            return $this->wrapArray((object) ['EmployeeContract' => []]);
+            throw new NmbrsException('No contract found for employee ' . $employee_id);
         } catch (\Exception $e) {
             throw new NmbrsException($e->getMessage());
         }
@@ -766,9 +766,11 @@ trait EmployeeCallsTrait
      * @param int $company_id
      * @param int $employee_id
      *
-     * @return object|null
+     * @return object
+     *
+     * @throws NmbrsException On error.
      */
-    public function getAllEmploymentsByCompanyAndEmployee(int $company_id, int $employee_id): ?object
+    public function getAllEmploymentsByCompanyAndEmployee(int $company_id, int $employee_id): object
     {
         try {
             $employments = $this->getAllEmploymentsByCompany($company_id);
@@ -778,7 +780,7 @@ trait EmployeeCallsTrait
                     return $employment->EmployeeEmployments;
                 }
             }
-            return null;
+            throw new NmbrsException('No employments found for employee ' . $employee_id . ' at company ' . $company_id);
         } catch (\Exception $e) {
             throw new NmbrsException($e->getMessage());
         }
