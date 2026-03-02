@@ -31,8 +31,6 @@ trait EmployeeCallsTrait
         }
     }
 
-
-
     /**
      * Get functions for each employee in a given company
      *
@@ -47,8 +45,11 @@ trait EmployeeCallsTrait
     public function getAllEmployeesByCompany(int $company_id, int $employeeType): array
     {
         try {
-            $response = $this->employeeClient->List_GetByCompany(['CompanyID' => $company_id, 'EmployeeType' => $employeeType]);
-            return $this->wrapArray($response->List_GetByCompanyResult);
+            $response = $this->employeeClient->List_GetByCompany(['CompanyId' => $company_id, 'EmployeeType' => $employeeType]);
+            if (isset($response->List_GetByCompanyResult->Employee)) {
+                return $this->wrapArray($response->List_GetByCompanyResult->Employee);
+            }
+            return [];
         } catch (\Exception $e) {
             throw new NmbrsException($e->getMessage());
         }
