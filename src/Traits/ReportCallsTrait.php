@@ -52,11 +52,11 @@ trait ReportCallsTrait
      *
      * @param string $taskId
      *
-     * @return object
+     * @return null|object
      *
      * @throws NmbrsException
      */
-    public function backgroundTask(string $taskId): object
+    public function backgroundTask(string $taskId): ?object
     {
         try {
             $response = $this->reportClient->Reports_BackgroundTask_Result(['TaskId' => $taskId]);
@@ -65,5 +65,65 @@ trait ReportCallsTrait
         } catch (\Exception $e) {
             throw new NmbrsException($e->getMessage());
         }
+    }
+
+    /**
+     * Wacht op het resultaat van een Nmbrs background-task met exponential backoff.
+     * Polled met sleep-reeks 3, 5, 8, 13, 20, 30, 30, ... seconden (capped op 30s per iteratie)
+     * en stopt zodra de volgende sleep de maxSeconds zou overschrijden.
+     *
+     * @param string $taskId
+     * @param int $maxSeconds Totale max wachttijd in seconden (default 60)
+     *
+     * @return \stdClass Het volledige result object met Status='Success'
+     *
+     * @throws NmbrsException Bij status Failed/Error/Unknown of timeout
+     */
+    public function waitForBackgroundTaskResult(string $taskId, int $maxSeconds = 60): \stdClass
+    {
+        $sleepSequence = [3, 5, 8, 13, 20, 30];
+        $start = time();
+        $iteration = 0;
+        $lastStatus = '';
+
+        while (true) {
+            $result = $this->backgroundTask($taskId);
+
+            $lastStatus = strtolower((string)($result?->Status ?? ''));
+
+            if ('success' === $lastStatus) {
+                return $result;
+            }
+
+            if (in_array($lastStatus, ['failed', 'error', 'unknown'], true)) {
+                throw new NmbrsException(
+                    'Background task ' . $taskId . ' failed: status=' . $lastStatus
+                );
+            }
+
+            $elapsed = time() - $start;
+            $sleep = $sleepSequence[$iteration] ?? $maxSeconds;
+
+            if (($elapsed + $sleep) > $maxSeconds) {
+                $remaining = $maxSeconds - $elapsed;
+                if ($remaining <= 0) {
+                    break;
+                }
+                $sleep = min($sleep, $remaining);
+            }
+
+            sleep($sleep);
+            $iteration++;
+        }
+
+        $elapsedFinal = time() - $start;
+        if ('' !== $lastStatus) {
+            $statusForMessage = $lastStatus;
+        } else {
+            $statusForMessage = 'unknown';
+        }
+        throw new NmbrsException(
+            'Background task ' . $taskId . ' timeout after ' . $elapsedFinal . 's, last status: ' . $statusForMessage
+        );
     }
 }
