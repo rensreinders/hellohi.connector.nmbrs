@@ -32,6 +32,9 @@ class NmbrsClient
      */
     private $sandbox;
 
+    /** @var callable|null */
+    private $logger = null;
+
     use CompanyCallsTrait;
     use DebtorCallsTrait;
     use EmployeeCallsTrait;
@@ -44,15 +47,29 @@ class NmbrsClient
      * @param string $password
      * @param string $domain
      * @param bool $sandbox
+     * @param callable|null $logger  function(string $direction, string $service, string $action, string $xml): void
      */
-    public function __construct(string $username, string $password, string $domain, bool $sandbox = false)
+    public function __construct(string $username, string $password, string $domain, bool $sandbox = false, ?callable $logger = null)
     {
         $this->sandbox = $sandbox;
+        $this->logger = $logger;
 
         $this->debtorClient = $this->getClientForService(self::DEBTOR_SERVICE, $username, $password, $domain);
         $this->companyClient = $this->getClientForService(self::COMPANY_SERVICE, $username, $password, $domain);
         $this->employeeClient = $this->getClientForService(self::EMPLOYEE_SERVICE, $username, $password, $domain);
         $this->reportClient = $this->getClientForService(self::REPORT_SERVICE, $username, $password, $domain);
+    }
+
+    /**
+     * setLogger
+     *
+     * @param callable $logger  function(string $direction, string $service, string $action, string $xml): void
+     *
+     * @return void
+     */
+    public function setLogger(callable $logger): void
+    {
+        $this->logger = $logger;
     }
 
     /**
@@ -83,8 +100,13 @@ class NmbrsClient
     protected function getClientForService(string $service, string $username, string $password, string $domain): SoapClient
     {
         $ns = $this->getBaseUrl() . $service;
+        $options = ['trace' => 1];
 
-        $client = new SoapClient($ns . ".asmx?WSDL", ['trace' => 1]);
+        if (!is_null($this->logger)) {
+            $client = new LoggingSoapClient($ns . '.asmx?WSDL', $options, $this->logger, $service);
+        } else {
+            $client = new SoapClient($ns . '.asmx?WSDL', $options);
+        }
 
         $authHeader = new SoapHeader($ns, "AuthHeaderWithDomain", [
             'Username' => $username,
